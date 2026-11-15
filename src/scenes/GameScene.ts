@@ -3,7 +3,8 @@ import { CONFIG } from '../config';
 import { DebugGizmos } from '../debug';
 import { objectBox, overlaps, playerBox } from '../hitbox';
 import type { WorldObj } from '../hitbox';
-import { leaderboard } from '../leaderboard';
+import { reportGame } from '../api';
+import type { GameReport } from '../api';
 import { Level, paceAtTime } from '../level';
 import type { Pace, Spawn } from '../level';
 import { newPlayer, respawnAfterFall, stepPlayer } from '../physics';
@@ -176,12 +177,19 @@ export class GameScene extends Phaser.Scene {
   private async finish(): Promise<void> {
     this.state = 'over';
     const win = this.score >= CONFIG.targetScore;
+    // registra SEMPRE la partita sul server (anche da ospite); se sei loggato aggiorna il record
+    let report: GameReport | null = null;
     try {
-      await leaderboard.submit(this.playerName, this.score);
+      report = await reportGame({
+        score: this.score,
+        durationSec: this.elapsed,
+        reachedTarget: win,
+        name: this.playerName,
+      });
     } catch (e) {
       console.error(e);
     }
-    this.scene.start('GameOver', { name: this.playerName, score: this.score, win });
+    this.scene.start('GameOver', { name: this.playerName, score: this.score, win, report });
   }
 
   private handlePhysics(res: StepResult): void {
