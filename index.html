@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>Endless Runner</title>
+    <style>
+      html, body { margin: 0; height: 100%; background: #000; overflow: hidden;
+                   touch-action: none; -webkit-user-select: none; user-select: none; }
+      input { -webkit-user-select: text; user-select: text; } /* necessario per scrivere il nome su iOS */
+      #game { width: 100%; height: 100%; }
+      /* Avviso se il telefono e' in verticale (il browser non puo' bloccare l'orientamento) */
+      #rotate { display: none; position: fixed; inset: 0; z-index: 10; background: #000; color: #fff;
+                font: 600 24px Arial, sans-serif; align-items: center; justify-content: center;
+                text-align: center; padding: 24px; }
+      @media (orientation: portrait) { #rotate { display: flex; } }
+    </style>
+  </head>
+  <body>
+    <div id="game"></div>
+    <div id="rotate">Ruota il dispositivo in orizzontale</div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
