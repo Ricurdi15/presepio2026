@@ -64,7 +64,8 @@ export class NameScene extends Phaser.Scene {
          <div name="msg" style="min-height:26px;color:#ff8a8a;text-align:center;font:20px Arial,sans-serif;"></div>
        </div>`,
     );
-    const q = <T extends HTMLElement>(n: string): T => dom.getChildByName(n) as T;
+    // querySelector e non getChildByName: quest'ultimo funziona solo su input/bottoni, non sui div
+const q = <T extends HTMLElement>(n: string): T => (dom.node as HTMLElement).querySelector(`[name="${n}"]`) as T;
     const user = q<HTMLInputElement>('u');
     const pass = q<HTMLInputElement>('p');
     const msg = q<HTMLElement>('msg');
